@@ -76,4 +76,4 @@ Your agent reads the queue over MCP (`list_issues`, `get_issue`), fixes the root
 
 ## Limits
 
-The sandbox runs on our Snowflake copy of the marketplace, and Cassis executes the SQL there. Connecting your own warehouse is not self-serve yet — that starts with a conversation, and one domain's schema is enough to begin. Each signup carries a small inference credit; tell us if you run out. `cassis ontology upload` publishes immediately unless you pass `--no-publish`.
+The sandbox runs on our Snowflake copy of the marketplace, and Cassis executes the SQL there. Connecting your own warehouse is not self-serve yet — that starts with a conversation, and one domain's schema is enough to begin. When you get there, [cassis-ontology-starter](https://github.com/GetCassis/cassis-ontology-starter) is the same wiring with none of this content: the CI gates, the MCP config and the modeling guide, ready for your own schema. Each signup carries a small inference credit; tell us if you run out. `cassis ontology upload` publishes immediately unless you pass `--no-publish`.
