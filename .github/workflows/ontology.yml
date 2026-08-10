@@ -1,0 +1,45 @@
+name: cassis ontology
+
+# Pull requests run the same gates you run locally with `cassis verify`.
+# Merging to main is what publishes: Cassis picks the commit up over git sync,
+# so nothing here uploads. If your project is NOT connected to this repository
+# in Cassis, add a push-to-main job running `cassis ontology upload` instead.
+
+on:
+  pull_request:
+    paths: ["cassis/**"]
+
+jobs:
+  check:
+    name: ontology validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install cassis-cli==1.4.1
+      - name: cassis ontology fmt --check
+        run: cassis ontology fmt --check
+      - name: cassis ontology check
+        env:
+          CASSIS_API_KEY: ${{ secrets.CASSIS_API_KEY }}
+          CASSIS_PROJECT_ID: ${{ vars.CASSIS_PROJECT_ID }}
+        run: cassis ontology check
+
+  eval:
+    name: eval suite
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install cassis-cli==1.4.1
+      - name: cassis eval run
+        env:
+          CASSIS_API_KEY: ${{ secrets.CASSIS_API_KEY }}
+          CASSIS_PROJECT_ID: ${{ vars.CASSIS_PROJECT_ID }}
+          RUN_LABEL: PR ${{ github.event.number }} ${{ github.head_ref }}
+        run: cassis eval run --label "$RUN_LABEL"
