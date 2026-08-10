@@ -1,0 +1,15 @@
+description: 'Share of real customers who placed more than one delivered order: distinct CUSTOMER_UNIQUE_ID with two or more
+  delivered orders, divided by distinct CUSTOMER_UNIQUE_ID with at least one delivered order, as a percentage. Count people
+  by CUSTOMER_UNIQUE_ID, never by the per-order CUSTOMER_ID.'
+display_name: Repeat customer rate
+domain_path: marketplace
+expression: 100 * (COUNT DISTINCT CUSTOMER_UNIQUE_ID with >= 2 delivered orders) / (COUNT DISTINCT CUSTOMER_UNIQUE_ID with
+  >= 1 delivered order)
+filters: STALLORA.FCT_ORDERS.IS_DELIVERED = TRUE (requires JOIN CUSTOMERS.CUSTOMER_ID = FCT_ORDERS.CUSTOMER_ID)
+name: repeat_customer_rate
+synonyms:
+- repeat rate
+- returning customer rate
+table_name: CUSTOMERS
+table_schema: STALLORA
+unit: '%'

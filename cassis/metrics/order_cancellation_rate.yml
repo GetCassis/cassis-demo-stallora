@@ -1,0 +1,12 @@
+description: Share of all orders whose status is 'canceled', as a percentage of all orders regardless of status (no delivered-only
+  filter).
+display_name: Order cancellation rate
+domain_path: marketplace
+expression: 100 * AVG(CASE WHEN "ORDER_STATUS" = 'canceled' THEN 1 ELSE 0 END)
+name: order_cancellation_rate
+synonyms:
+- cancellation rate
+- cancel rate
+table_name: FCT_ORDERS
+table_schema: STALLORA
+unit: '%'

@@ -1,0 +1,34 @@
+approximate_row_count: 1000163
+columns:
+- data_type: TEXT
+  description: 'Postal-code prefix. NOT unique: many rows per prefix; dedup before joining.'
+  name: ZIP_CODE
+  ordinal: 0
+- data_type: TEXT
+  description: City label of the observed point. Can disagree with seller/customer city; prefer those columns.
+  name: CITY
+  ordinal: 1
+- data_type: TEXT
+  description: Country code of the observed point (ES, IT, DE, NL, FR). Can disagree with seller/customer country; prefer
+    those columns.
+  name: COUNTRY
+  ordinal: 2
+- data_type: NUMBER
+  description: Latitude of one observed point in the prefix area. Average per prefix for a usable coordinate.
+  name: LATITUDE
+  ordinal: 3
+- data_type: NUMBER
+  description: Longitude of one observed point in the prefix area. Average per prefix for a usable coordinate.
+  name: LONGITUDE
+  ordinal: 4
+description: 'Postal-code-prefix geolocation lookup: maps prefixes to latitude/longitude points. About 1M rows with MANY duplicate
+  rows per prefix: never join it directly (it fans out and inflates aggregates). Collapse to one row per prefix first (GROUP
+  BY ZIP_CODE, AVG latitude and longitude in a subquery), then LEFT JOIN on the prefix. Coordinates are area-level. Its city/country
+  can disagree with the seller/customer tables; prefer those.'
+domain_path: marketplace
+schema_name: STALLORA
+synonyms:
+- geolocation
+- geo lookup
+- coordinates
+table_name: GEOLOCATION

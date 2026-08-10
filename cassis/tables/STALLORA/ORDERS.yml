@@ -1,0 +1,62 @@
+approximate_row_count: 1193292
+columns:
+- data_type: TEXT
+  description: Unique identifier of the order.
+  name: ORDER_ID
+  ordinal: 0
+- data_type: TEXT
+  description: 'Customer record that placed the order. Per-order id: use CUSTOMER_UNIQUE_ID on CUSTOMERS to identify the real
+    person.'
+  name: CUSTOMER_ID
+  ordinal: 1
+- data_type: TEXT
+  description: 'Fulfillment status of the order. Values: delivered, shipped, canceled, unavailable, invoiced, processing,
+    created, approved. About 97% of orders are delivered. Realized sales are status ''delivered''.'
+  name: ORDER_STATUS
+  ordinal: 2
+  synonyms:
+  - status
+  - order status
+- data_type: TIMESTAMP_NTZ
+  description: When the order was placed. Orders span about two years, up to the most recent order date in the data.
+  name: ORDER_PURCHASE_TIMESTAMP
+  ordinal: 3
+  synonyms:
+  - order date
+  - purchase date
+- data_type: TIMESTAMP_NTZ
+  description: When the order payment was approved.
+  name: ORDER_APPROVED_AT
+  ordinal: 4
+- data_type: TIMESTAMP_NTZ
+  description: When the order was handed to the logistics carrier.
+  name: ORDER_DELIVERED_CARRIER_DATE
+  ordinal: 5
+- data_type: TIMESTAMP_NTZ
+  description: When the order was delivered to the customer. Null if not yet delivered. Delivery days = days from ORDER_PURCHASE_TIMESTAMP
+    to this timestamp.
+  name: ORDER_DELIVERED_CUSTOMER_DATE
+  ordinal: 6
+  synonyms:
+  - delivery date
+  - delivered at
+- data_type: TIMESTAMP_NTZ
+  description: Delivery date promised to the customer at purchase. An order is late when ORDER_DELIVERED_CUSTOMER_DATE is
+    after this date, on time otherwise.
+  name: ORDER_ESTIMATED_DELIVERY_DATE
+  ordinal: 7
+  synonyms:
+  - promised delivery date
+  - estimated delivery
+description: 'A purchase placed by a customer. One row per order. An order contains one or more order items. Status tracks
+  the order through fulfillment; money lives on ORDER_ITEMS, not here. About 9,300 orders have no order item rows at all (mostly
+  canceled or unavailable): LEFT JOIN from orders when item data might be absent.'
+domain_path: marketplace
+grain:
+- ORDER_ID
+schema_name: STALLORA
+synonyms:
+- order
+- purchase
+- transaction
+table_name: ORDERS

@@ -1,0 +1,56 @@
+approximate_row_count: 1351800
+columns:
+- data_type: TEXT
+  description: Order this order item belongs to.
+  name: ORDER_ID
+  ordinal: 0
+- data_type: NUMBER
+  description: Sequence number of the line within its order (1, 2, 3, ...).
+  name: ORDER_ITEM_ID
+  ordinal: 1
+- data_type: TEXT
+  description: Product sold on this order item.
+  name: PRODUCT_ID
+  ordinal: 2
+- data_type: TEXT
+  description: Seller that sells and fulfills this order item.
+  name: SELLER_ID
+  ordinal: 3
+- data_type: TIMESTAMP_NTZ
+  description: Deadline by which the seller must hand the order item to the carrier.
+  name: SHIPPING_LIMIT_DATE
+  ordinal: 4
+- data_type: FLOAT
+  description: 'Sale amount of this order item in EUR, excluding shipping. The basis of business volume (also called revenue,
+    sales or GMV): sum it over delivered orders per the business_volume metric.'
+  name: PRICE
+  ordinal: 5
+  synonyms:
+  - sale price
+  - item amount
+  - revenue
+  - sales
+  - gmv
+  unit: EUR
+- data_type: FLOAT
+  description: Shipping amount charged on this order item, in EUR. Excluded from business volume.
+  name: FREIGHT_VALUE
+  ordinal: 6
+  synonyms:
+  - shipping
+  - shipping cost
+  unit: EUR
+description: 'A single product sold by one seller within an order, i.e. one order line. One row per (order, order line number).
+  This is the sale grain that carries business volume: PRICE is the item sale amount and FREIGHT_VALUE is shipping. Use this
+  table for sales broken down by product, category, seller or geography.'
+domain_path: marketplace
+grain:
+- ORDER_ID
+- ORDER_ITEM_ID
+schema_name: STALLORA
+synonyms:
+- order item
+- order line
+- line item
+- offer
+table_name: ORDER_ITEMS

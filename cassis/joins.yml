@@ -1,0 +1,98 @@
+- condition_sql: STALLORA.CLOSED_DEALS.LEAD_ID = STALLORA.MARKETING_QUALIFIED_LEADS.LEAD_ID
+  description: '[one_to_one] Each closed deal converted from exactly one lead.'
+  from_schema: STALLORA
+  from_table: CLOSED_DEALS
+  source: manual
+  to_schema: STALLORA
+  to_table: MARKETING_QUALIFIED_LEADS
+- condition_sql: STALLORA.CLOSED_DEALS.SELLER_ID = STALLORA.SELLERS.SELLER_ID
+  description: '[one_to_one] Bridges seller acquisition to the marketplace: each closed deal creates one seller. Partial bridge:
+    only about 4,560 of 10,104 closed-deal sellers appear in the marketplace tables. State this caveat when combining acquisition
+    and marketplace data.'
+  from_schema: STALLORA
+  from_table: CLOSED_DEALS
+  source: manual
+  to_schema: STALLORA
+  to_table: SELLERS
+- condition_sql: STALLORA.CUSTOMERS.CUSTOMER_ZIP_CODE = STALLORA.GEOLOCATION.ZIP_CODE
+  description: '[many_to_one after dedup] Customer area coordinates. GEOLOCATION has many rows per prefix: NEVER join directly
+    (fan-out). Collapse to one row per prefix first, then LEFT JOIN.'
+  from_schema: STALLORA
+  from_table: CUSTOMERS
+  source: manual
+  to_schema: STALLORA
+  to_table: GEOLOCATION
+- condition_sql: STALLORA.DIM_SELLER.SELLER_ID = STALLORA.CLOSED_DEALS.SELLER_ID
+  description: '[one_to_one] A seller''s acquisition deal, for combining seller performance with how the seller was acquired.
+    Partial: only the subset of sellers acquired through a tracked deal match.'
+  from_schema: STALLORA
+  from_table: DIM_SELLER
+  source: manual
+  to_schema: STALLORA
+  to_table: CLOSED_DEALS
+- condition_sql: STALLORA.FCT_ORDERS.CUSTOMER_ID = STALLORA.CUSTOMERS.CUSTOMER_ID
+  description: '[many_to_one] The order fact''s customer record, for breakdowns by person, city or country.'
+  from_schema: STALLORA
+  from_table: FCT_ORDERS
+  source: manual
+  to_schema: STALLORA
+  to_table: CUSTOMERS
+- condition_sql: STALLORA.ORDERS.CUSTOMER_ID = STALLORA.CUSTOMERS.CUSTOMER_ID
+  description: '[many_to_one] Each order is placed by one customer record. Customer records are per order; the real person
+    is CUSTOMER_UNIQUE_ID.'
+  from_schema: STALLORA
+  from_table: ORDERS
+  source: manual
+  to_schema: STALLORA
+  to_table: CUSTOMERS
+- condition_sql: STALLORA.ORDER_ITEMS.ORDER_ID = STALLORA.ORDERS.ORDER_ID
+  description: '[many_to_one] Each order item belongs to one order; an order contains one or more items.'
+  from_schema: STALLORA
+  from_table: ORDER_ITEMS
+  source: manual
+  to_schema: STALLORA
+  to_table: ORDERS
+- condition_sql: STALLORA.ORDER_ITEMS.PRODUCT_ID = STALLORA.PRODUCTS.PRODUCT_ID
+  description: '[many_to_one] Each order item sells one product; a product appears in many order items.'
+  from_schema: STALLORA
+  from_table: ORDER_ITEMS
+  source: manual
+  to_schema: STALLORA
+  to_table: PRODUCTS
+- condition_sql: STALLORA.ORDER_ITEMS.SELLER_ID = STALLORA.SELLERS.SELLER_ID
+  description: '[many_to_one] Each order item is sold and fulfilled by one seller; a seller has many order items.'
+  from_schema: STALLORA
+  from_table: ORDER_ITEMS
+  source: manual
+  to_schema: STALLORA
+  to_table: SELLERS
+- condition_sql: STALLORA.ORDER_PAYMENTS.ORDER_ID = STALLORA.ORDERS.ORDER_ID
+  description: '[many_to_one] Each payment record settles one order; an order can have several payment records.'
+  from_schema: STALLORA
+  from_table: ORDER_PAYMENTS
+  source: manual
+  to_schema: STALLORA
+  to_table: ORDERS
+- condition_sql: STALLORA.ORDER_REVIEWS.ORDER_ID = STALLORA.ORDERS.ORDER_ID
+  description: '[many_to_one] Each review is about one order; an order usually has one review. Review ids are not unique;
+    dedup by order id.'
+  from_schema: STALLORA
+  from_table: ORDER_REVIEWS
+  source: manual
+  to_schema: STALLORA
+  to_table: ORDERS
+- condition_sql: STALLORA.PRODUCTS.CATEGORY = STALLORA.DIM_CATEGORY.CATEGORY
+  description: '[many_to_one] Maps a product''s category to its department.'
+  from_schema: STALLORA
+  from_table: PRODUCTS
+  source: manual
+  to_schema: STALLORA
+  to_table: DIM_CATEGORY
+- condition_sql: STALLORA.SELLERS.SELLER_ZIP_CODE = STALLORA.GEOLOCATION.ZIP_CODE
+  description: '[many_to_one after dedup] Seller area coordinates. GEOLOCATION has many rows per prefix: NEVER join directly
+    (fan-out). Collapse to one row per prefix first (GROUP BY prefix, AVG latitude and longitude), then LEFT JOIN.'
+  from_schema: STALLORA
+  from_table: SELLERS
+  source: manual
+  to_schema: STALLORA
+  to_table: GEOLOCATION

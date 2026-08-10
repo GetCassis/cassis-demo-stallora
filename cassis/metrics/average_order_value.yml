@@ -1,0 +1,14 @@
+description: Average sales value of a delivered order, in EUR (mean of FCT_ORDERS.ORDER_VALUE over delivered orders). Excludes
+  freight.
+display_name: Average order value (AOV)
+domain_path: marketplace
+expression: AVG("ORDER_VALUE")
+filters: '"IS_DELIVERED" = TRUE'
+name: average_order_value
+synonyms:
+- AOV
+- average basket
+- average basket size
+table_name: FCT_ORDERS
+table_schema: STALLORA
+unit: EUR

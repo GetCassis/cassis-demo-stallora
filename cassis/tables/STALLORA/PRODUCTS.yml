@@ -1,0 +1,53 @@
+approximate_row_count: 32951
+columns:
+- data_type: TEXT
+  description: Unique identifier of the product.
+  name: PRODUCT_ID
+  ordinal: 0
+- data_type: TEXT
+  description: Readable product category label (snake_case), for example electronics, furniture_decor, health_beauty, sports_leisure.
+    About 70 categories; 'other' marks uncategorized products. Join DIM_CATEGORY to roll up to a department.
+  name: CATEGORY
+  ordinal: 1
+  synonyms:
+  - category
+  - product category
+- data_type: NUMBER
+  description: Product package weight in grams.
+  name: WEIGHT_G
+  ordinal: 2
+  unit: g
+- data_type: NUMBER
+  description: Product package length.
+  name: LENGTH_CM
+  ordinal: 3
+  unit: cm
+- data_type: NUMBER
+  description: Product package height.
+  name: HEIGHT_CM
+  ordinal: 4
+  unit: cm
+- data_type: NUMBER
+  description: Product package width.
+  name: WIDTH_CM
+  ordinal: 5
+  unit: cm
+- data_type: NUMBER
+  description: Number of photos on the product listing.
+  name: PHOTOS_QTY
+  ordinal: 6
+  unit: count
+description: 'An item listed in the Stallora catalog. One row per product. CATEGORY is the readable category label; DIM_CATEGORY
+  groups it into a department. Physical attributes (weight, dimensions) drive shipping. About 623 products are uncategorized
+  (CATEGORY = ''other''): report them as uncategorized rather than dropping them.'
+domain_path: marketplace
+grain:
+- PRODUCT_ID
+schema_name: STALLORA
+synonyms:
+- product
+- item
+- article
+- sku
+- catalog
+table_name: PRODUCTS

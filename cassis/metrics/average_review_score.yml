@@ -1,0 +1,12 @@
+description: Average order review score on a 1 to 5 scale, across orders that have a review (one score per order).
+display_name: Average review score
+domain_path: marketplace
+expression: AVG("REVIEW_SCORE")
+filters: '"REVIEW_SCORE" IS NOT NULL'
+name: average_review_score
+synonyms:
+- average rating
+- mean review score
+table_name: FCT_ORDERS
+table_schema: STALLORA
+unit: score

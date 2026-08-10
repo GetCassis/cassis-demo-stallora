@@ -1,0 +1,12 @@
+description: Share of delivered orders that arrived on or before the estimated delivery date, as a percentage. Around 92%.
+display_name: On-time delivery rate
+domain_path: marketplace
+expression: 100 * AVG(CASE WHEN "IS_ON_TIME" THEN 1 ELSE 0 END)
+filters: '"IS_DELIVERED" = TRUE AND "ORDER_DELIVERED_CUSTOMER_DATE" IS NOT NULL'
+name: on_time_delivery_rate
+synonyms:
+- on time rate
+- punctual delivery rate
+table_name: FCT_ORDERS
+table_schema: STALLORA
+unit: '%'

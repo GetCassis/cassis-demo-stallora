@@ -1,0 +1,44 @@
+approximate_row_count: 23
+columns:
+- data_type: DATE
+  description: First day of the calendar month. One row per month.
+  name: MONTH
+  ordinal: 0
+- data_type: NUMBER
+  description: Count of delivered orders in the month.
+  name: ORDERS
+  ordinal: 1
+  unit: orders
+- data_type: FLOAT
+  description: Business volume (sum of order value) for delivered orders in the month, in EUR.
+  name: GMV
+  ordinal: 2
+  synonyms:
+  - revenue
+  - sales
+  - gmv
+  unit: EUR
+- data_type: FLOAT
+  description: Average order value for delivered orders in the month, in EUR.
+  name: AVG_ORDER_VALUE
+  ordinal: 3
+  synonyms:
+  - aov
+  unit: EUR
+- data_type: NUMBER
+  description: Average order review score for delivered orders in the month, 1 to 5.
+  name: AVG_REVIEW_SCORE
+  ordinal: 4
+  unit: score
+description: Curated monthly sales rollup, one row per calendar month, built from FCT_ORDERS over delivered orders. Carries
+  ORDERS, GMV, AVG_ORDER_VALUE and AVG_REVIEW_SCORE per month. A pre-aggregation of the business_volume metric by month, for
+  trend questions.
+domain_path: marketplace
+grain:
+- MONTH
+schema_name: STALLORA
+synonyms:
+- monthly sales
+- sales by month
+- gmv by month
+table_name: FCT_SALES_MONTHLY

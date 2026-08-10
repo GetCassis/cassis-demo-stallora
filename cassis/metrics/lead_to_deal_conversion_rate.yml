@@ -1,0 +1,13 @@
+description: Share of marketing qualified leads that became closed deals, as a percentage. Group by CHANNEL to compare channel
+  effectiveness.
+display_name: Lead-to-deal conversion rate
+domain_path: seller_acquisition
+expression: 100 * SUM("CLOSED_DEALS") / NULLIF(SUM("LEADS"), 0)
+name: lead_to_deal_conversion_rate
+synonyms:
+- conversion rate
+- lead conversion
+- close rate
+table_name: FCT_SELLER_ACQUISITION
+table_schema: STALLORA
+unit: '%'

@@ -1,0 +1,75 @@
+approximate_row_count: 10104
+columns:
+- data_type: TEXT
+  description: Lead this deal converted from. Join key to MARKETING_QUALIFIED_LEADS.
+  name: LEAD_ID
+  ordinal: 0
+  synonyms:
+  - mql id
+- data_type: TEXT
+  description: 'Seller created when the deal closed. Bridge to the marketplace (partial: about 4,560 of 10,104 appear in the
+    marketplace tables).'
+  name: SELLER_ID
+  ordinal: 1
+- data_type: TEXT
+  description: Sales development representative who qualified the lead.
+  name: SALES_DEV_REP_ID
+  ordinal: 2
+  synonyms:
+  - sdr
+- data_type: TEXT
+  description: Sales representative who closed the deal.
+  name: SALES_REP_ID
+  ordinal: 3
+  synonyms:
+  - sr
+  - account executive
+- data_type: TIMESTAMP_NTZ
+  description: When the deal closed. Deals close over about a year.
+  name: WON_DATE
+  ordinal: 4
+  synonyms:
+  - close date
+- data_type: TEXT
+  description: The seller's industry vertical reported at acquisition, used for sales-team segmentation. Distinct from BUSINESS_TYPE.
+  name: BUSINESS_SEGMENT
+  ordinal: 5
+  synonyms:
+  - segment
+- data_type: TEXT
+  description: Sales-stage classification assigned by the rep, reflecting the lead's maturity and online footprint. Values
+    include online_medium, online_big, industry, offline, online_small, online_beginner, online_top.
+  name: LEAD_TYPE
+  ordinal: 6
+- data_type: TEXT
+  description: 'Self-reported nature of the lead''s business. Values: reseller, manufacturer, other.'
+  name: BUSINESS_TYPE
+  ordinal: 7
+- data_type: BOOLEAN
+  description: Whether the lead has a registered company. Mostly null.
+  name: HAS_COMPANY
+  ordinal: 8
+- data_type: FLOAT
+  description: Monthly revenue the lead declared at acquisition, in EUR. Self-reported, not actual sales; often 0.
+  name: DECLARED_MONTHLY_REVENUE
+  ordinal: 9
+  unit: EUR
+- data_type: FLOAT
+  description: Catalog size the lead declared at acquisition.
+  name: DECLARED_CATALOG_SIZE
+  ordinal: 10
+  unit: count
+description: 'A won deal: a lead that signed up and became a seller. One row per closed deal (one per lead, one per seller).
+  Carries the seller''s declared profile at acquisition and the sales reps who handled it. Declared fields are self-reported
+  and sparse. Deals close over about a year. Bridge to the marketplace via SELLER_ID is partial (about 4,560 of 10,104 appear
+  in the marketplace tables).'
+domain_path: seller_acquisition
+grain:
+- LEAD_ID
+schema_name: STALLORA
+synonyms:
+- closed deal
+- won deal
+- signed seller
+- seller acquisition
+table_name: CLOSED_DEALS

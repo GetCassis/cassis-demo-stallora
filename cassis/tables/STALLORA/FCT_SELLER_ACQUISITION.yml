@@ -1,0 +1,46 @@
+approximate_row_count: 8
+columns:
+- data_type: TEXT
+  description: Acquisition channel (organic, paid, social, direct, referral, email, display, other).
+  name: CHANNEL
+  ordinal: 0
+  synonyms:
+  - channel
+- data_type: NUMBER
+  description: Number of marketing qualified leads from the channel.
+  name: LEADS
+  ordinal: 1
+  synonyms:
+  - lead count
+  unit: count
+- data_type: NUMBER
+  description: Number of leads from the channel that became closed deals.
+  name: CLOSED_DEALS
+  ordinal: 2
+  synonyms:
+  - won deals
+  unit: count
+- data_type: NUMBER
+  description: Closed deals divided by leads for the channel, as a percentage.
+  name: CONVERSION_RATE_PCT
+  ordinal: 3
+  synonyms:
+  - conversion rate
+  unit: '%'
+- data_type: NUMBER
+  description: Average days from first contact to won date for the channel's closed deals.
+  name: AVG_DAYS_TO_CLOSE
+  ordinal: 4
+  unit: days
+description: Curated channel-grain rollup of the seller acquisition funnel, one row per acquisition channel. Built from MARKETING_QUALIFIED_LEADS
+  and CLOSED_DEALS. Carries LEADS, CLOSED_DEALS, CONVERSION_RATE_PCT and AVG_DAYS_TO_CLOSE per channel, for comparing channel
+  effectiveness.
+domain_path: seller_acquisition
+grain:
+- CHANNEL
+schema_name: STALLORA
+synonyms:
+- acquisition funnel
+- funnel by channel
+- channel funnel
+table_name: FCT_SELLER_ACQUISITION

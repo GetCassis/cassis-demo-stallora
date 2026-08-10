@@ -1,0 +1,13 @@
+description: Average number of days from order purchase to delivery, over delivered orders.
+display_name: Average delivery time
+domain_path: marketplace
+expression: AVG("DELIVERY_DAYS")
+filters: '"IS_DELIVERED" = TRUE'
+name: average_delivery_time
+synonyms:
+- delivery time
+- average delivery days
+- lead time
+table_name: FCT_ORDERS
+table_schema: STALLORA
+unit: days

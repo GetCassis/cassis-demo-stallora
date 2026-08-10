@@ -1,0 +1,16 @@
+description: Sum of order item price over delivered orders, excluding freight, in EUR. Also called GMV, revenue or sales.
+  Use ORDER_ITEMS for breakdowns by product, category, seller or country.
+display_name: Business volume (BV)
+domain_path: marketplace
+expression: SUM("PRICE")
+filters: STALLORA.ORDERS.ORDER_STATUS = 'delivered' (requires JOIN ORDER_ITEMS.ORDER_ID = ORDERS.ORDER_ID)
+name: business_volume
+synonyms:
+- BV
+- GMV
+- gross merchandise value
+- revenue
+- sales
+table_name: ORDER_ITEMS
+table_schema: STALLORA
+unit: EUR

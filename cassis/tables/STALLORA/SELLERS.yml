@@ -1,0 +1,31 @@
+approximate_row_count: 37140
+columns:
+- data_type: TEXT
+  description: Unique identifier of the seller.
+  name: SELLER_ID
+  ordinal: 0
+- data_type: TEXT
+  description: City the seller is based in.
+  name: SELLER_CITY
+  ordinal: 1
+- data_type: TEXT
+  description: 'Country the seller is based in, as a 2-letter code: ES, IT, DE, NL or FR. ES is by far the most common.'
+  name: SELLER_COUNTRY
+  ordinal: 2
+  synonyms:
+  - country
+- data_type: TEXT
+  description: Seller's postal code. Join key to GEOLOCATION (dedup it first).
+  name: SELLER_ZIP_CODE
+  ordinal: 3
+description: An independent merchant that lists products and fulfills order items on the marketplace. One row per seller.
+  For per-seller performance rollups, use DIM_SELLER.
+domain_path: marketplace
+grain:
+- SELLER_ID
+schema_name: STALLORA
+synonyms:
+- seller
+- merchant
+- vendor
+table_name: SELLERS

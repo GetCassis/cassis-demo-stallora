@@ -1,0 +1,37 @@
+approximate_row_count: 96000
+columns:
+- data_type: TEXT
+  description: Unique identifier of the marketing qualified lead.
+  name: LEAD_ID
+  ordinal: 0
+  synonyms:
+  - mql id
+- data_type: DATE
+  description: Date of first contact with the lead. First contacts span about a year.
+  name: FIRST_CONTACT_DATE
+  ordinal: 1
+- data_type: TEXT
+  description: Landing page recorded on this lead row. One value per lead; do not infer multi-touch attribution from this
+    field alone.
+  name: LANDING_PAGE_ID
+  ordinal: 2
+- data_type: TEXT
+  description: 'Acquisition channel. Values: organic, paid, social, direct, referral, email, display, other.'
+  name: CHANNEL
+  ordinal: 3
+  synonyms:
+  - acquisition channel
+  - channel
+  - source
+description: 'A marketing qualified lead: a prospective seller who signed up and was qualified for sales follow-up. One row
+  per lead. A lead may later convert into a closed deal. First contacts span about a year.'
+domain_path: seller_acquisition
+grain:
+- LEAD_ID
+schema_name: STALLORA
+synonyms:
+- lead
+- mql
+- marketing qualified lead
+- prospect
+table_name: MARKETING_QUALIFIED_LEADS

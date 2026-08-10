@@ -1,0 +1,38 @@
+approximate_row_count: 1190688
+columns:
+- data_type: TEXT
+  description: 'Identifier of the review. Not strictly unique: do NOT use as a join key or distinct-count key; dedup by ORDER_ID
+    instead.'
+  name: REVIEW_ID
+  ordinal: 0
+- data_type: TEXT
+  description: Order this review is about. Use as the dedup key when counting distinct reviews.
+  name: ORDER_ID
+  ordinal: 1
+- data_type: NUMBER
+  description: 'Satisfaction score from 1 (worst) to 5 (best). Scores skew positive: 5 is by far the largest bucket, with
+    a secondary spike at 1.'
+  name: REVIEW_SCORE
+  ordinal: 2
+  synonyms:
+  - rating
+  - stars
+  unit: score
+- data_type: TIMESTAMP_NTZ
+  description: When the review was submitted.
+  name: REVIEW_CREATION_DATE
+  ordinal: 3
+- data_type: TIMESTAMP_NTZ
+  description: When the review was answered.
+  name: REVIEW_ANSWER_TIMESTAMP
+  ordinal: 4
+description: 'A customer satisfaction review of an order, scored 1 to 5. Roughly one review per order, though not every order
+  has one (LEFT JOIN from ORDERS) and a few carry more than one. REVIEW_ID is not strictly unique: never treat it as a join
+  key; dedup by ORDER_ID when counting distinct reviews. Higher score means happier customer.'
+domain_path: marketplace
+schema_name: STALLORA
+synonyms:
+- review
+- rating
+- feedback
+table_name: ORDER_REVIEWS

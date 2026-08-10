@@ -4,9 +4,11 @@ Cassis is a context layer between your warehouse and the agents that query it. Y
 
 Use this repository to try that headless, from your own terminal, on a sample marketplace warehouse. About fifteen minutes, and nothing here touches your own data.
 
+`cassis/` holds the whole thing already: six domains as Markdown, fifteen tables, thirteen joins and ten metrics as YAML, plus the `AGENTS.md` the text-to-SQL agent reads. Read it before you run anything — it is what a context layer looks like as code.
+
 ## 1. Get a sandbox and a key
 
-Sign up at [app.getcassis.com](https://app.getcassis.com). You land in your own organization with a seeded project, **Demo — Stallora Marketplace**: a pan-European marketplace on Snowflake, ~37,000 sellers and 1.2M orders, already modeled and published.
+Sign up at [app.getcassis.com](https://app.getcassis.com). You land in your own organization with a seeded project, **Demo — Stallora Marketplace**: a pan-European marketplace on Snowflake, ~37,000 sellers and 1.2M orders. The warehouse is already connected and this exact ontology is already published against it, so there is nothing to wire up.
 
 Under Settings, open **API keys** and create one (`sk-k6-…`). One key serves both the CLI and the MCP server.
 
@@ -29,9 +31,9 @@ Ask something easy first, like average order value: you get the number, the SQL,
 
 > which sellers are at risk?
 
-Cassis does not pick a threshold and hand you a number. It returns a plan with the interpretations "at risk" could mean — low on-time rate, weak reviews, dormancy, combinations — one marked as the default, and waits for you to choose. That is the moment a wrong number would otherwise reach whoever asked.
+Cassis does not pick a threshold and hand you a number. It returns a plan with the interpretations "at risk" could mean — low on-time rate, weak reviews, dormancy, combinations — one marked as default, and waits for you to choose. That is the moment a wrong number would otherwise reach whoever asked.
 
-## 3. Bring the ontology into this repository
+## 3. Bind the tree to your sandbox
 
 ```bash
 pip install -U cassis-cli
@@ -39,11 +41,11 @@ cassis projects list                  # copy the sandbox project id
 cassis ontology pull --project <id>
 ```
 
-That writes `cassis/` — domains as Markdown, tables, joins and metrics as YAML — plus `cassis/project.yml` recording which project this checkout belongs to, so later commands need no `--project`. Read `cassis/AGENTS.md` first: it is the modeling doctrine the text-to-SQL agent itself reads, and the CLI keeps it current.
+`pull` writes `cassis/project.yml`, recording which project this checkout belongs to so later commands need no `--project`. It should report no other change: the tree here is the one your sandbox was seeded with. A diff means someone already edited one side.
 
 ## 4. Settle a definition and prove it
 
-Add the definition the question above was missing, as a metric under `cassis/metrics/`. Then:
+Notice `cassis/metrics/` has no definition of an at-risk seller — that is why step 2 asked you instead of guessing. Add one, then:
 
 ```bash
 cassis ontology fmt      # canonical form; refreshes AGENTS.md and domain navigation
@@ -64,7 +66,7 @@ The generated SQL now uses your definition. `test` executes its own default choi
 
 In Cassis, under Settings → GitHub, click **Connect GitHub** and install the Cassis Sync app on this repository. Then in Project configuration select the sandbox project, enter the repository as `owner/name` with path `cassis`, and save.
 
-The repository is now the source of truth: open a pull request, `.github/workflows/ontology.yml` runs the same gates, merging to `main` publishes. Add `CASSIS_API_KEY` as an Actions secret and `CASSIS_PROJECT_ID` as a variable so CI can reach the project. Push the tree from step 3 to finish the handshake.
+The repository is now the source of truth: open a pull request, `.github/workflows/ontology.yml` runs the same gates, merging to `main` publishes. Add `CASSIS_API_KEY` as an Actions secret and `CASSIS_PROJECT_ID` as a variable so CI can reach the project.
 
 ## 6. Let it find its own gaps
 

@@ -1,0 +1,13 @@
+description: Share of delivered orders that arrived after their estimated delivery date, as a percentage. The complement of
+  on_time_delivery_rate.
+display_name: Late delivery rate
+domain_path: marketplace
+expression: 100 * AVG(CASE WHEN "IS_ON_TIME" THEN 0 ELSE 1 END)
+filters: '"IS_DELIVERED" = TRUE AND "ORDER_DELIVERED_CUSTOMER_DATE" IS NOT NULL'
+name: late_delivery_rate
+synonyms:
+- late rate
+- delayed delivery rate
+table_name: FCT_ORDERS
+table_schema: STALLORA
+unit: '%'

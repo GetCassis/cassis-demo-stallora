@@ -1,0 +1,12 @@
+description: Number of sellers with at least one delivered order. Counts sellers that have actually sold, as opposed to all
+  registered sellers.
+display_name: Active sellers
+domain_path: marketplace
+expression: COUNT(CASE WHEN "DELIVERED_ORDERS" >= 1 THEN 1 END)
+name: active_sellers
+synonyms:
+- active seller count
+- selling sellers
+table_name: DIM_SELLER
+table_schema: STALLORA
+unit: sellers

@@ -1,0 +1,25 @@
+approximate_row_count: 72
+columns:
+- data_type: TEXT
+  description: Product category label. Join key from PRODUCTS.CATEGORY.
+  name: CATEGORY
+  ordinal: 0
+- data_type: TEXT
+  description: 'Broad department the category rolls up to. Values: electronics, home_garden, fashion, health_beauty, sports_leisure,
+    media, food_drinks, industry_tools, automotive, office, other.'
+  name: DEPARTMENT
+  ordinal: 1
+  synonyms:
+  - department
+  - category group
+description: Lookup mapping each product category to a broader department (for example electronics, home_garden, fashion,
+  health_beauty). One row per category. LEFT JOIN from PRODUCTS on CATEGORY to roll sales up to the department level.
+domain_path: marketplace
+grain:
+- CATEGORY
+schema_name: STALLORA
+synonyms:
+- category
+- department
+- category lookup
+table_name: DIM_CATEGORY

@@ -1,0 +1,40 @@
+approximate_row_count: 1246632
+columns:
+- data_type: TEXT
+  description: Order this payment settles.
+  name: ORDER_ID
+  ordinal: 0
+- data_type: NUMBER
+  description: Sequence number of this payment record within the order.
+  name: PAYMENT_SEQUENTIAL
+  ordinal: 1
+- data_type: TEXT
+  description: 'Method of payment. Values: credit_card, bank_transfer, voucher, debit_card, not_defined. Credit card dominates
+    (about three quarters of records), then bank_transfer.'
+  name: PAYMENT_TYPE
+  ordinal: 2
+  synonyms:
+  - payment method
+- data_type: NUMBER
+  description: Number of installments the payment is split into; 1 means paid upfront.
+  name: PAYMENT_INSTALLMENTS
+  ordinal: 3
+  unit: count
+- data_type: FLOAT
+  description: Amount settled by this payment record, in EUR.
+  name: PAYMENT_VALUE
+  ordinal: 4
+  synonyms:
+  - amount paid
+  unit: EUR
+description: 'A payment record against an order. One row per (order, payment sequence): an order can be settled in several
+  records, for example a voucher plus a card. To get the amount paid per order, sum PAYMENT_VALUE grouped by order.'
+domain_path: marketplace
+grain:
+- ORDER_ID
+- PAYMENT_SEQUENTIAL
+schema_name: STALLORA
+synonyms:
+- payment
+- order payment
+table_name: ORDER_PAYMENTS

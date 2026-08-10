@@ -1,0 +1,76 @@
+approximate_row_count: 37140
+columns:
+- data_type: TEXT
+  description: Unique identifier of the seller. One row per seller.
+  name: SELLER_ID
+  ordinal: 0
+- data_type: TEXT
+  description: City the seller is based in.
+  name: SELLER_CITY
+  ordinal: 1
+- data_type: TEXT
+  description: Country the seller is based in (ES, IT, DE, NL, FR).
+  name: SELLER_COUNTRY
+  ordinal: 2
+  synonyms:
+  - country
+- data_type: TIMESTAMP_NTZ
+  description: Purchase timestamp of the seller's first order. Null for sellers with no sales.
+  name: FIRST_SALE_DATE
+  ordinal: 3
+- data_type: NUMBER
+  description: Count of the seller's distinct delivered orders.
+  name: DELIVERED_ORDERS
+  ordinal: 4
+  synonyms:
+  - delivered order count
+  unit: orders
+- data_type: FLOAT
+  description: 'The seller''s business volume in EUR: sum of the seller''s item PRICE over delivered orders.'
+  name: GMV
+  ordinal: 5
+  synonyms:
+  - seller gmv
+  - seller revenue
+  - seller sales
+  unit: EUR
+- data_type: NUMBER
+  description: Number of distinct products the seller has sold in delivered orders.
+  name: PRODUCTS_SOLD
+  ordinal: 6
+  unit: count
+- data_type: NUMBER
+  description: Share of the seller's distinct delivered orders that arrived on or before the estimated delivery date, as a
+    fraction from 0 to 1 (0.92 = 92%). Null for sellers with no delivered orders.
+  name: ON_TIME_RATE
+  ordinal: 7
+  synonyms:
+  - on time rate
+  - punctuality
+- data_type: NUMBER
+  description: The seller's mean days from purchase to delivery, over delivered orders.
+  name: AVG_DELIVERY_DAYS
+  ordinal: 8
+  unit: days
+- data_type: NUMBER
+  description: The seller's average order review score on a 1 to 5 scale, averaged per distinct delivered order. Null for
+    sellers with no reviewed delivered orders.
+  name: AVG_REVIEW_SCORE
+  ordinal: 9
+  synonyms:
+  - seller rating
+  - average rating
+  unit: score
+description: 'Curated seller dimension, one row per seller. Built from SELLERS plus the seller''s delivered orders in FCT_ORDERS,
+  ORDER_ITEMS and ORDER_REVIEWS. Carries lifetime rollups over the seller''s delivered orders: DELIVERED_ORDERS, GMV, PRODUCTS_SOLD,
+  ON_TIME_RATE (a 0 to 1 fraction), AVG_DELIVERY_DAYS and AVG_REVIEW_SCORE (1 to 5). Sellers with no delivered orders carry
+  zero or null rollups.'
+domain_path: marketplace
+grain:
+- SELLER_ID
+schema_name: STALLORA
+synonyms:
+- seller dimension
+- seller rollup
+- seller scorecard
+table_name: DIM_SELLER

@@ -1,0 +1,39 @@
+approximate_row_count: 1193292
+columns:
+- data_type: TEXT
+  description: Per-order identifier of the customer. Unique per row; one is created for each order. Never count people with
+    this column.
+  name: CUSTOMER_ID
+  ordinal: 0
+- data_type: TEXT
+  description: Stable identifier of the real person across all their orders. Count distinct customers (people) with this column.
+  name: CUSTOMER_UNIQUE_ID
+  ordinal: 1
+  synonyms:
+  - person id
+  - unique customer
+- data_type: TEXT
+  description: Customer's city.
+  name: CUSTOMER_CITY
+  ordinal: 2
+- data_type: TEXT
+  description: 'Country the customer is based in, as a 2-letter code: ES, IT, NL, DE or FR. ES is the largest market.'
+  name: CUSTOMER_COUNTRY
+  ordinal: 3
+  synonyms:
+  - country
+- data_type: TEXT
+  description: Customer's postal code. Join key to GEOLOCATION (dedup it first).
+  name: CUSTOMER_ZIP_CODE
+  ordinal: 4
+description: 'A buyer on the marketplace. One row per customer per order: CUSTOMER_ID is issued for a single order, while
+  CUSTOMER_UNIQUE_ID identifies the real person across their orders. Count people by CUSTOMER_UNIQUE_ID.'
+domain_path: marketplace
+grain:
+- CUSTOMER_ID
+schema_name: STALLORA
+synonyms:
+- customer
+- buyer
+- shopper
+table_name: CUSTOMERS
