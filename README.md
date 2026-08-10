@@ -1,10 +1,10 @@
 # Try Cassis from your own agent
 
-Cassis is a context layer between your warehouse and the agents that query it. Your business definitions live in a git repository you own; Cassis grounds every question in them and keeps them true as people ask things.
+Cassis is a context layer between your warehouse and the agents that query it. Your definitions live in a git repository you own; Cassis grounds every question in them and keeps them true as people ask things.
 
-Use this repository to try that headless, from your own terminal, on a sample marketplace warehouse. About fifteen minutes, and nothing here touches your own data.
+Try it from your terminal on a sample marketplace warehouse: about fifteen minutes, nothing touching your own data. Asking, editing and proving are headless; two setup steps — the key, and connecting this repository — happen in the browser.
 
-`cassis/` holds the whole thing already: six domains as Markdown, fifteen tables, thirteen joins and ten metrics as YAML, plus the `AGENTS.md` the text-to-SQL agent reads. Read it before you run anything — it is what a context layer looks like as code.
+`cassis/` holds it already: six domains as Markdown, fifteen tables, thirteen joins and ten metrics as YAML, plus the `AGENTS.md` the text-to-SQL agent reads. Read it first — it is what a context layer looks like as code.
 
 ## 1. Get a sandbox and a key
 
@@ -70,7 +70,9 @@ The repository is now the source of truth: open a pull request, `.github/workflo
 
 ## 6. Let it find its own gaps
 
-Everything you asked in step 2 was recorded. Cassis clusters those conversations into issues — a missing definition, an ambiguous term, a join it had to guess — and proposes fixes as changes to these files. Your agent reads that queue over MCP (`list_issues`, `get_issue`), fixes the root cause here, proves it with `cassis verify`, and opens the pull request. Merging is the one step it cannot take.
+Everything you asked in step 2 was recorded. Cassis clusters those conversations into issues — a missing definition, an ambiguous term, a join it had to guess — and proposes fixes as changes to these files. The sandbox opens with three; the analysis that adds yours runs nightly, or you can start it from the app.
+
+Your agent reads the queue over MCP (`list_issues`, `get_issue`), fixes the root cause here, proves it with `cassis verify`, and opens the pull request. Merging is the one step it cannot take.
 
 ## Limits
 
