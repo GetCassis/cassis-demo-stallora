@@ -1,13 +1,24 @@
 name: cassis ontology
 
 # Pull requests run the same gates you run locally with `cassis verify`.
-# Merging to main is what publishes: Cassis picks the commit up over git sync,
-# so nothing here uploads. If your project is NOT connected to this repository
-# in Cassis, add a push-to-main job running `cassis ontology upload` instead.
+# Merging to main publishes, by whichever route applies to you:
+#   - repository connected in Cassis: the git-sync webhook publishes the merge.
+#   - not connected: the `publish` job below uploads it.
+# Keeping both is safe — an import whose tree already matches the working copy
+# is a no-op, so the webhook and the job cannot publish the same commit twice.
 
 on:
   pull_request:
     paths: ["cassis/**"]
+  push:
+    branches: [main]
+    paths: ["cassis/**"]
+
+env:
+  # Every command below needs the key, including the local-only ones: the CLI
+  # exits 2 without it even when it is not talking to a project.
+  CASSIS_API_KEY: ${{ secrets.CASSIS_API_KEY }}
+  CASSIS_PROJECT_ID: ${{ vars.CASSIS_PROJECT_ID }}
 
 jobs:
   check:
@@ -22,13 +33,11 @@ jobs:
       - name: cassis ontology fmt --check
         run: cassis ontology fmt --check
       - name: cassis ontology check
-        env:
-          CASSIS_API_KEY: ${{ secrets.CASSIS_API_KEY }}
-          CASSIS_PROJECT_ID: ${{ vars.CASSIS_PROJECT_ID }}
         run: cassis ontology check
 
   eval:
     name: eval suite
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     needs: check
     steps:
@@ -39,7 +48,21 @@ jobs:
       - run: pip install cassis-cli==1.4.1
       - name: cassis eval run
         env:
-          CASSIS_API_KEY: ${{ secrets.CASSIS_API_KEY }}
-          CASSIS_PROJECT_ID: ${{ vars.CASSIS_PROJECT_ID }}
           RUN_LABEL: PR ${{ github.event.number }} ${{ github.head_ref }}
         run: cassis eval run --label "$RUN_LABEL"
+
+  publish:
+    name: publish to Cassis
+    # Only needed when the repository is NOT connected to the project in Cassis.
+    # Harmless if it is: the webhook's import no-ops on an unchanged tree.
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install cassis-cli==1.4.1
+      - name: cassis ontology upload
+        run: cassis ontology upload
