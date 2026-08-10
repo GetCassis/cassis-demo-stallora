@@ -6,6 +6,10 @@ name: cassis ontology
 #   - not connected: the `publish` job below uploads it.
 # Keeping both is safe — an import whose tree already matches the working copy
 # is a no-op, so the webhook and the job cannot publish the same commit twice.
+#
+# Everything is gated on CASSIS_API_KEY existing, so a repository created from
+# this template sits quiet until you add the secret rather than greeting you
+# with a failed run.
 
 on:
   pull_request:
@@ -21,8 +25,21 @@ env:
   CASSIS_PROJECT_ID: ${{ vars.CASSIS_PROJECT_ID }}
 
 jobs:
+  # `secrets` is not readable from a job-level `if`, so detect the key here and
+  # let the real jobs depend on the answer.
+  configured:
+    name: credentials present
+    runs-on: ubuntu-latest
+    outputs:
+      ready: ${{ steps.probe.outputs.ready }}
+    steps:
+      - id: probe
+        run: echo "ready=${CASSIS_API_KEY:+yes}" >> "$GITHUB_OUTPUT"
+
   check:
     name: ontology validation
+    needs: configured
+    if: needs.configured.outputs.ready == 'yes'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -37,9 +54,9 @@ jobs:
 
   eval:
     name: eval suite
+    needs: check
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    needs: check
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -55,9 +72,9 @@ jobs:
     name: publish to Cassis
     # Only needed when the repository is NOT connected to the project in Cassis.
     # Harmless if it is: the webhook's import no-ops on an unchanged tree.
+    needs: check
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
-    needs: check
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
