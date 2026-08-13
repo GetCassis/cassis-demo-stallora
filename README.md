@@ -72,7 +72,14 @@ The repository is now the source of truth: open a pull request, `.github/workflo
 
 Everything you asked in step 2 was recorded. Cassis clusters those conversations into issues — a missing definition, an ambiguous term, a join it had to guess — and proposes fixes as changes to these files. The sandbox opens with three; the analysis that adds yours runs nightly, or you can start it from the app.
 
-Your agent reads the queue over MCP (`list_issues`, `get_issue`), fixes the root cause here, proves it with `cassis verify`, and opens the pull request. Merging is the one step it cannot take.
+Read the queue over MCP (`list_issues`, `get_issue`), or from the terminal:
+
+```bash
+cassis issues list                    # id, impact, occurrences, status, title
+cassis issues show <id>               # diagnosis, suggested action, occurrences
+```
+
+Both read the same queue, so an agent with no browser has the whole loop: read the issue, fix the root cause in these files, prove it with `cassis verify`, open the pull request. `--json` on either command gives it parseable output. Merging is the one step it cannot take.
 
 ## Limits
 
