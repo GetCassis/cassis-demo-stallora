@@ -4,6 +4,8 @@ Cassis is a context layer between your warehouse and the agents that query it. Y
 
 Try it from your terminal on a sample marketplace warehouse: about fifteen minutes, nothing touching your own data. Asking, editing and proving are headless; two setup steps — the key, and connecting this repository — happen in the browser.
 
+Start with **Use this template** at the top of this page, then clone your own copy. Step 5 connects that repository to Cassis, so it has to be one you own.
+
 `cassis/` holds it already: six domains as Markdown, fifteen tables, thirteen joins and ten metrics as YAML, plus the `AGENTS.md` the text-to-SQL agent reads. Read it first — it is what a context layer looks like as code.
 
 ## 1. Get a sandbox and a key
