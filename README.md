@@ -1,6 +1,6 @@
 # Try Cassis from your own agent
 
-[Website](https://getcassis.com) · [Documentation](https://docs.getcassis.com) · [Contact](https://getcassis.com/contact/)
+[Website](https://getcassis.com) · [Product](https://getcassis.com/product) · [Documentation](https://docs.getcassis.com) · [Contact](https://getcassis.com/contact/)
 
 Cassis is a context layer between your warehouse and the agents that query it. Your definitions live in a git repository you own; Cassis grounds every question in them and keeps them true as people ask things.
 
@@ -159,3 +159,4 @@ cassis issues resolve <id>
 - [cassis-ontology-starter](https://github.com/GetCassis/cassis-ontology-starter) — start an ontology on your own schema
 - [cassis-ontology-examples](https://github.com/GetCassis/cassis-ontology-examples) — two complete worked ontologies
 - [getcassis.com](https://getcassis.com) — what Cassis is
+- [getcassis.com/product](https://getcassis.com/product) — context maintenance for analytics agents, the loop this sandbox runs
