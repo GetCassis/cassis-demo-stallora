@@ -6,9 +6,6 @@ This walkthrough runs one full loop on Stallora, a fictional pan-European market
 
 **You need:** a GitHub account, Python 3.10+, and an agent that speaks MCP. The prompts below work in any of them; Claude Code is the one this repository is pre-wired for.
 
-> [!IMPORTANT]
-> Do all of the setup before starting the loop. The loop is one continuous conversation, and stopping in the middle of it to create a key or wire up CI breaks the thread.
-
 ---
 
 ## Setup
