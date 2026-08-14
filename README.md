@@ -65,7 +65,7 @@ Cassis does not pick a threshold and hand you a number. It returns a plan with t
 
 > a seller is at risk when it has at least 5 delivered orders and either an on-time delivery rate below 85% or an average review score below 3. A null on-time rate or null review score never trips its criterion. Return the count of at-risk sellers. Use that definition.
 
-You get your answer in one turn — the null sentence settles the one thing SQL would otherwise decide silently, so there is nothing left for Cassis to ask. But that definition now lives in exactly one conversation — yours. The next person to ask gets the same gate, or worse, invents a different threshold and reports a different number. Let's make it governed.
+You get your answer in one turn — the null sentence settles the one thing SQL would otherwise decide silently, so there is nothing left for Cassis to ask. If the number comes back without your thresholds, your agent approved the earlier plan instead of passing your definition — have it send the definition as a new question, not as approval. But that definition now lives in exactly one conversation — yours. The next person to ask gets the same gate, or worse, invents a different threshold and reports a different number. Let's make it governed.
 
 ### See what Cassis already knows about the gap
 
@@ -123,6 +123,6 @@ The other issues stay open on purpose — a real queue is never empty. CLI and M
 
 The sandbox runs on our Snowflake copy of the marketplace, and Cassis executes the SQL there. Connecting your own warehouse is not self-serve yet — that starts with a conversation, and one domain's schema is enough to begin. When you get there, [cassis-ontology-starter](https://github.com/GetCassis/cassis-ontology-starter) is the same wiring with none of this content: the CI gates, the MCP config and the modeling guide, ready for your own schema.
 
-Your sandbox also opens with a pending source change — a column renamed in the warehouse overnight, which breaks the average order value metric. That queue is in the app under Review; the CLI and MCP do not read it yet.
+Your sandbox also opens with a pending source change — a detected rename awaiting review that would break the average order value metric. That queue is in the app under Review; the CLI and MCP do not read it yet.
 
 Each signup carries a small inference credit; tell us if you run out. `cassis ontology upload` publishes immediately unless you pass `--no-publish`.
