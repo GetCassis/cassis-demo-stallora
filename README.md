@@ -63,9 +63,9 @@ Cassis does not pick a threshold and hand you a number. It returns a plan with t
 
 ### Answer it yourself
 
-> a seller is at risk when it has at least 5 delivered orders and either an on-time delivery rate below 85% or an average review score below 3. Use that definition.
+> a seller is at risk when it has at least 5 delivered orders and either an on-time delivery rate below 85% or an average review score below 3. A null on-time rate or null review score never trips its criterion. Return the count of at-risk sellers. Use that definition.
 
-You get your answer. But that definition now lives in exactly one conversation — yours. The next person to ask gets the same gate, or worse, invents a different threshold and reports a different number. Let's make it governed.
+You get your answer in one turn — the null sentence settles the one thing SQL would otherwise decide silently, so there is nothing left for Cassis to ask. But that definition now lives in exactly one conversation — yours. The next person to ask gets the same gate, or worse, invents a different threshold and reports a different number. Let's make it governed.
 
 ### See what Cassis already knows about the gap
 
