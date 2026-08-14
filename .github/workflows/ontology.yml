@@ -2,10 +2,11 @@ name: cassis ontology
 
 # Pull requests run the same gates you run locally with `cassis verify`.
 # Merging to main publishes, by whichever route applies to you:
-#   - repository connected in Cassis: the git-sync webhook publishes the merge.
-#   - not connected: the `publish` job below uploads it.
-# Keeping both is safe — an import whose tree already matches the working copy
-# is a no-op, so the webhook and the job cannot publish the same commit twice.
+#   - not connected in Cassis (the template default): the `publish` job below
+#     uploads it.
+#   - repository connected in Cassis (GitHub App): the git-sync webhook
+#     publishes the merge — delete the `publish` job, or a merge can record a
+#     redundant extra version.
 #
 # Everything is gated on CASSIS_API_KEY existing, so a repository created from
 # this template sits quiet until you add the secret rather than greeting you
