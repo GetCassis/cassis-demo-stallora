@@ -29,7 +29,7 @@ Open [`cassis/metrics/on_time_delivery_rate.yml`](cassis/metrics/on_time_deliver
 
 ### 2. Create a sandbox and an API key
 
-Sign up at [app.getcassis.com](https://app.getcassis.com). You land in your own organization with a seeded project, **Demo — Stallora Marketplace**: ~37,000 sellers and 1.2M orders on our Snowflake, already connected, with this exact ontology published against it. The sandbox also carries a fictional team's recent activity — a few conversations, and the issues Cassis clustered from them — so the queue you will read in the loop has content on day one. On a live project, that history is your own team's.
+Sign up at [app.getcassis.com](https://app.getcassis.com). You land in your own organization with a seeded project, **Demo — Stallora Marketplace**: ~37,000 sellers and 1.2M orders on our Snowflake, already connected, with this exact ontology published against it. The sandbox also carries the issues Cassis detected from a fictional team's recent activity, so the queue you will read in the loop has content on day one. On a live project, those come from your own team's questions.
 
 Under **Settings → API keys**, create a key (`sk-k6-…`). One key serves the CLI, the MCP server and CI.
 
