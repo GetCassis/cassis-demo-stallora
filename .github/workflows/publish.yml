@@ -1,0 +1,64 @@
+name: cassis publish
+
+# Merging to main publishes, by whichever route applies to you:
+#   - not connected in Cassis (the template default): the `publish` job below
+#     uploads it.
+#   - repository connected in Cassis (GitHub App): the git-sync webhook
+#     publishes the merge — delete this file, or a merge can record a
+#     redundant extra version.
+#
+# Pull-request checks live in ontology.yml. Keeping publish in its own file
+# means a pull request never lists a skipped publish job.
+
+on:
+  push:
+    branches: [main]
+    paths: ["cassis/**"]
+
+env:
+  CASSIS_API_KEY: ${{ secrets.CASSIS_API_KEY }}
+  CASSIS_PROJECT_ID: ${{ vars.CASSIS_PROJECT_ID }}
+
+jobs:
+  configured:
+    name: credentials present
+    runs-on: ubuntu-latest
+    outputs:
+      ready: ${{ steps.probe.outputs.ready }}
+    steps:
+      - id: probe
+        run: |
+          if [ -z "$CASSIS_API_KEY" ]; then
+            echo "::error::CASSIS_API_KEY is not set, so this merge will not publish. Add it as an Actions secret and CASSIS_PROJECT_ID as an Actions variable — setup step 5 in the README."
+            exit 1
+          fi
+          echo "ready=yes" >> "$GITHUB_OUTPUT"
+
+  check:
+    name: ontology validation
+    needs: configured
+    if: needs.configured.outputs.ready == 'yes'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install cassis-cli==1.7.0
+      - name: cassis ontology fmt --check
+        run: cassis ontology fmt --check
+      - name: cassis ontology check
+        run: cassis ontology check
+
+  publish:
+    name: publish to Cassis
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install cassis-cli==1.7.0
+      - name: cassis ontology upload
+        run: cassis ontology upload

@@ -1,12 +1,8 @@
 name: cassis ontology
 
 # Pull requests run the same gates you run locally with `cassis verify`.
-# Merging to main publishes, by whichever route applies to you:
-#   - not connected in Cassis (the template default): the `publish` job below
-#     uploads it.
-#   - repository connected in Cassis (GitHub App): the git-sync webhook
-#     publishes the merge — delete the `publish` job, or a merge can record a
-#     redundant extra version.
+# Publishing lives in publish.yml, which runs on push to main only, so a pull
+# request lists just the two checks below and nothing shows as skipped.
 #
 # Everything is gated on CASSIS_API_KEY existing, so a repository created from
 # this template sits quiet until you add the secret rather than greeting you
@@ -14,9 +10,6 @@ name: cassis ontology
 
 on:
   pull_request:
-    paths: ["cassis/**"]
-  push:
-    branches: [main]
     paths: ["cassis/**"]
 
 env:
@@ -52,7 +45,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install cassis-cli==1.5.0
+      - run: pip install cassis-cli==1.7.0
       - name: cassis ontology fmt --check
         run: cassis ontology fmt --check
       - name: cassis ontology check
@@ -61,31 +54,14 @@ jobs:
   eval:
     name: eval suite
     needs: check
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install cassis-cli==1.5.0
+      - run: pip install cassis-cli==1.7.0
       - name: cassis eval run
         env:
           RUN_LABEL: PR ${{ github.event.number }} ${{ github.head_ref }}
         run: cassis eval run --label "$RUN_LABEL"
-
-  publish:
-    name: publish to Cassis
-    # Only needed when the repository is NOT connected to the project in Cassis.
-    # Harmless if it is: the webhook's import no-ops on an unchanged tree.
-    needs: check
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - run: pip install cassis-cli==1.5.0
-      - name: cassis ontology upload
-        run: cassis ontology upload

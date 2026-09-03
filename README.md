@@ -70,7 +70,7 @@ In your repository's settings, add:
 | `CASSIS_API_KEY` | Actions **secret** |
 | `CASSIS_PROJECT_ID` | Actions **variable** |
 
-[`.github/workflows/ontology.yml`](.github/workflows/ontology.yml) is already written: it validates and runs the eval suite on pull requests, and publishes on merge to `main`. Nothing to install, nothing to connect in a browser.
+CI is already written: [`ontology.yml`](.github/workflows/ontology.yml) validates and runs the eval suite on pull requests, [`publish.yml`](.github/workflows/publish.yml) publishes on merge to `main`. Nothing to install, nothing to connect in a browser.
 
 Setup is done. Everything below is one conversation with your agent, in your clone.
 
@@ -127,7 +127,6 @@ One question, plus the SQL you agree is right ([demo-gold.sql](demo-gold.sql)). 
 
 - **ontology validation** — structure, round-tripping, and schema references
 - **eval suite** — the full suite against this branch's files, so a change that breaks a definition anywhere goes red in front of a reviewer rather than in front of a user
-- **publish to Cassis** — shows *skipped*: publish only runs on `main`
 
 ### 9. Merge
 
