@@ -148,14 +148,13 @@ cassis issues resolve <id>
 
 ## Limits
 
-- The sandbox runs on our Snowflake, and Cassis executes the SQL there. Connecting your own warehouse is not self-serve yet — [talk to us](https://getcassis.com/contact/); one domain's schema is enough to begin. When you get there, [cassis-ontology-starter](https://github.com/GetCassis/cassis-ontology-starter) is the same wiring with none of this content, ready for your own schema.
+- The sandbox runs on our Snowflake, and Cassis executes the SQL there. Connecting your own warehouse is not self-serve yet — [talk to us](https://getcassis.com/contact/); one domain's schema is enough to begin. When you get there, use this template again and replace the `cassis/` tree with your own.
 - Each signup carries a small inference credit — [contact us](https://getcassis.com/contact/) if you run out.
 - `cassis ontology upload` publishes straight from your working tree, no pull request — pass `--no-publish` to upload without publishing.
 
 ## Links
 
 - [docs.getcassis.com](https://docs.getcassis.com) — the product documentation
-- [cassis-ontology-starter](https://github.com/GetCassis/cassis-ontology-starter) — start an ontology on your own schema
 - [cassis-ontology-examples](https://github.com/GetCassis/cassis-ontology-examples) — two complete worked ontologies
 - [getcassis.com](https://getcassis.com) — what Cassis is
 - [getcassis.com/product](https://getcassis.com/product) — context maintenance for analytics agents, the loop this sandbox runs
