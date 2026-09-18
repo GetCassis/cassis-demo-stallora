@@ -28,9 +28,10 @@ jobs:
     steps:
       - id: probe
         run: |
-          if [ -z "$CASSIS_API_KEY" ]; then
-            echo "::error::CASSIS_API_KEY is not set, so this merge will not publish. Add it as an Actions secret and CASSIS_PROJECT_ID as an Actions variable — setup step 5 in the README."
-            exit 1
+          if [ -z "$CASSIS_API_KEY" ] || [ -z "$CASSIS_PROJECT_ID" ]; then
+            echo "::notice::Cassis credentials are not configured; skipping validation and publication. Add CASSIS_API_KEY as an Actions secret and CASSIS_PROJECT_ID as an Actions variable to enable them (setup step 5 in the README)."
+            echo "ready=no" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
           echo "ready=yes" >> "$GITHUB_OUTPUT"
 
