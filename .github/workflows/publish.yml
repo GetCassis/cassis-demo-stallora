@@ -45,11 +45,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install "cassis-cli~=3.0"
-      - name: cassis ontology fmt --check
-        run: cassis ontology fmt --check
-      - name: cassis ontology check
-        run: cassis ontology check
+      - run: pip install "cassis-cli~=3.1"
+      - name: cassis context fmt --check
+        run: cassis context fmt --check
+      - name: cassis context check
+        run: cassis context check
 
   publish:
     name: publish to Cassis
@@ -60,6 +60,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install "cassis-cli~=3.0"
-      - name: cassis ontology upload
-        run: cassis ontology upload
+      - run: pip install "cassis-cli~=3.1"
+      - name: cassis context upload
+        run: cassis context upload
