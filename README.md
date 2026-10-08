@@ -29,7 +29,7 @@ Open [`cassis/metrics/on_time_delivery_rate.yml`](cassis/metrics/on_time_deliver
 
 ### 2. Create a sandbox and an API key
 
-Sign up at [app.getcassis.com](https://app.getcassis.com). You land in your own organization with a seeded project, **Demo — Stallora Marketplace**: ~37,000 sellers and 1.2M orders on our Snowflake, already connected, with this exact ontology published against it. The sandbox also carries the issues Cassis detected from a fictional team's recent activity, so the queue you will read in the loop has content on day one. On a live project, those come from your own team's questions.
+Sign up at [app.getcassis.com](https://app.getcassis.com). You land in your own organization with a seeded project, **Demo — Stallora Marketplace**: ~37,000 sellers and 1.2M orders on our Snowflake, already connected, with this exact context published against it. The sandbox also carries the issues Cassis detected from a fictional team's recent activity, so the queue you will read in the loop has content on day one. On a live project, those come from your own team's questions.
 
 Under **Settings → API keys**, create a key (`sk-k6-…`). One key serves the CLI, the MCP server and CI.
 
@@ -43,7 +43,7 @@ set -a; . ./.env; set +a
 ```bash
 pip install -U cassis-cli
 cassis projects list                  # copy the sandbox project id
-cassis ontology pull --project <id>
+cassis context pull --project <id>
 ```
 
 `pull` writes `cassis/project.yml`, recording which project this checkout belongs to, so later commands need no `--project`.
@@ -109,7 +109,7 @@ Cassis clusters the questions people ask into issues: a missing definition, an a
 
 > Looks right. Apply it on a branch and run checks.
 
-Your agent writes the files and validates them locally: `cassis ontology fmt` puts them in canonical form and refreshes the domain navigation, then `cassis ontology check` runs the same validation as the PR gate, cross-checking every reference against the warehouse's own schema.
+Your agent writes the files and validates them locally: `cassis context fmt` puts them in canonical form and refreshes the domain navigation, then `cassis context check` runs the same validation as the PR gate, cross-checking every reference against the warehouse's own schema.
 
 ### 6. Pin it with an eval
 
@@ -136,7 +136,7 @@ CI publishes the new version. Merging is the deploy — no console, no separate 
 
 > which sellers are at risk?
 
-**Expect a direct answer** — the same number, this time through the governed `at_risk_sellers` metric, with no gate. Start a *new* chat for this: each conversation is pinned to the ontology version it started on, so publishing never rewrites answers in a conversation already underway. A new chat picks up the latest version.
+**Expect a direct answer** — the same number, this time through the governed `at_risk_sellers` metric, with no gate. Start a *new* chat for this: each conversation is pinned to the context version it started on, so publishing never rewrites answers in a conversation already underway. A new chat picks up the latest version.
 
 ### 11. Close the issue
 
@@ -150,11 +150,11 @@ cassis issues resolve <id>
 
 - The sandbox runs on our Snowflake, and Cassis executes the SQL there. Connecting your own warehouse is not self-serve yet — [talk to us](https://getcassis.com/contact/); one domain's schema is enough to begin. When you get there, use this template again and replace the `cassis/` tree with your own.
 - Each signup carries a small inference credit — [contact us](https://getcassis.com/contact/) if you run out.
-- `cassis ontology upload` publishes straight from your working tree, no pull request — pass `--no-publish` to upload without publishing.
+- `cassis context upload` publishes straight from your working tree, no pull request — pass `--no-publish` to upload without publishing.
 
 ## Links
 
 - [docs.getcassis.com](https://docs.getcassis.com) — the product documentation
-- [cassis-ontology-examples](https://github.com/GetCassis/cassis-ontology-examples) — two complete worked ontologies
+- [cassis-ontology-examples](https://github.com/GetCassis/cassis-ontology-examples) — two complete worked context trees
 - [getcassis.com](https://getcassis.com) — what Cassis is
 - [getcassis.com/product](https://getcassis.com/product) — context maintenance for analytics agents, the loop this sandbox runs

@@ -1,4 +1,4 @@
-name: cassis ontology
+name: cassis context
 
 # Pull requests run the same gates you run locally with `cassis verify`.
 # Publishing lives in publish.yml, which runs on push to main only, so a pull
@@ -30,7 +30,7 @@ jobs:
       - id: probe
         run: |
           if [ -z "$CASSIS_API_KEY" ] || [ -z "$CASSIS_PROJECT_ID" ]; then
-            echo "::notice::Cassis credentials are not configured; skipping ontology validation and evals. Add CASSIS_API_KEY as an Actions secret and CASSIS_PROJECT_ID as an Actions variable to enable them (setup step 5 in the README)."
+            echo "::notice::Cassis credentials are not configured; skipping context validation and evals. Add CASSIS_API_KEY as an Actions secret and CASSIS_PROJECT_ID as an Actions variable to enable them (setup step 5 in the README)."
             echo "ready=no" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -46,11 +46,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install "cassis-cli~=3.0"
-      - name: cassis ontology fmt --check
-        run: cassis ontology fmt --check
-      - name: cassis ontology check
-        run: cassis ontology check
+      - run: pip install "cassis-cli~=3.1"
+      - name: cassis context fmt --check
+        run: cassis context fmt --check
+      - name: cassis context check
+        run: cassis context check
 
   eval:
     name: eval suite
@@ -61,7 +61,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install "cassis-cli~=3.0"
+      - run: pip install "cassis-cli~=3.1"
       - name: cassis eval run
         env:
           RUN_LABEL: PR ${{ github.event.number }} ${{ github.head_ref }}
