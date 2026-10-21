@@ -10,8 +10,16 @@ columns:
   name: CUSTOMER_ID
   ordinal: 1
 - data_type: TEXT
-  description: 'Fulfillment status of the order. Values: delivered, shipped, canceled, unavailable, invoiced, processing,
-    created, approved. About 97% of orders are delivered. Realized sales are status ''delivered''.'
+  description: Fulfillment status of the order. About 97% of orders are delivered. Realized sales are status 'delivered'.
+  enum_values:
+  - value: delivered
+  - value: shipped
+  - value: canceled
+  - value: unavailable
+  - value: invoiced
+  - value: processing
+  - value: created
+  - value: approved
   name: ORDER_STATUS
   ordinal: 2
   synonyms:

@@ -42,7 +42,11 @@ columns:
   name: LEAD_TYPE
   ordinal: 6
 - data_type: TEXT
-  description: 'Self-reported nature of the lead''s business. Values: reseller, manufacturer, other.'
+  description: Self-reported nature of the lead's business.
+  enum_values:
+  - value: reseller
+  - value: manufacturer
+  - value: other
   name: BUSINESS_TYPE
   ordinal: 7
 - data_type: BOOLEAN
