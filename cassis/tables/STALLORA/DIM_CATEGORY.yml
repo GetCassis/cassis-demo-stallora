@@ -5,8 +5,19 @@ columns:
   name: CATEGORY
   ordinal: 0
 - data_type: TEXT
-  description: 'Broad department the category rolls up to. Values: electronics, home_garden, fashion, health_beauty, sports_leisure,
-    media, food_drinks, industry_tools, automotive, office, other.'
+  description: Broad department the category rolls up to.
+  enum_values:
+  - value: electronics
+  - value: home_garden
+  - value: fashion
+  - value: health_beauty
+  - value: sports_leisure
+  - value: media
+  - value: food_drinks
+  - value: industry_tools
+  - value: automotive
+  - value: office
+  - value: other
   name: DEPARTMENT
   ordinal: 1
   synonyms:

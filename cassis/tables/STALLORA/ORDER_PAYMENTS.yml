@@ -9,8 +9,13 @@ columns:
   name: PAYMENT_SEQUENTIAL
   ordinal: 1
 - data_type: TEXT
-  description: 'Method of payment. Values: credit_card, bank_transfer, voucher, debit_card, not_defined. Credit card dominates
-    (about three quarters of records), then bank_transfer.'
+  description: Method of payment. Credit card dominates (about three quarters of records), then bank_transfer.
+  enum_values:
+  - value: credit_card
+  - value: bank_transfer
+  - value: voucher
+  - value: debit_card
+  - value: not_defined
   name: PAYMENT_TYPE
   ordinal: 2
   synonyms:

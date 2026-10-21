@@ -16,7 +16,16 @@ columns:
   name: LANDING_PAGE_ID
   ordinal: 2
 - data_type: TEXT
-  description: 'Acquisition channel. Values: organic, paid, social, direct, referral, email, display, other.'
+  description: Acquisition channel.
+  enum_values:
+  - value: organic
+  - value: paid
+  - value: social
+  - value: direct
+  - value: referral
+  - value: email
+  - value: display
+  - value: other
   name: CHANNEL
   ordinal: 3
   synonyms:
