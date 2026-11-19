@@ -156,5 +156,4 @@ cassis issues resolve <id>
 
 - [docs.getcassis.com](https://docs.getcassis.com) — the product documentation
 - [cassis-ontology-examples](https://github.com/GetCassis/cassis-ontology-examples) — two complete worked context trees
-- [getcassis.com](https://getcassis.com) — what Cassis is
-- [getcassis.com/product](https://getcassis.com/product) — context maintenance for analytics agents, the loop this sandbox runs
+- [getcassis.com](https://getcassis.com) — the data context layer that improves with use, and the loop this sandbox runs
