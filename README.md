@@ -1,159 +1,85 @@
 # Try Cassis from your own agent
 
-[Website](https://getcassis.com) · [Product](https://getcassis.com/product) · [Documentation](https://docs.getcassis.com) · [Contact](https://getcassis.com/contact/)
+[Website](https://getcassis.com) · [Documentation](https://docs.getcassis.com) · [Contact](https://getcassis.com/contact/)
 
-Cassis is a context layer between your warehouse and the agents that query it. Your definitions live in a git repository you own; Cassis grounds every question in them and keeps them true as people ask things.
+Cassis is the data context layer that improves with use. Your agent asks Cassis; Cassis answers from definitions that live in a Git repository you own, and stops instead of guessing when a definition is missing.
 
-This walkthrough runs the full loop on Stallora, a fictional pan-European marketplace. About fifteen minutes, and nothing touches your own data. You will:
+This walkthrough uses Stallora, a fictional pan-European marketplace: about 37,000 sellers and 1.2M orders on our Snowflake. Nothing touches your own data.
 
-- **Ask a question with no agreed definition** and watch Cassis refuse to guess.
-- **Supply the definition** and get the answer.
-- **Ship it as a governed metric** through a pull request, with an eval pinning it.
-- **Ask again** and get the number directly.
+## 1. Ask from your agent (2 minutes)
 
-**You need:** a GitHub account, Python 3.10+, and an agent that speaks MCP. The prompts work in any MCP client; Claude Code is the one this repository is pre-wired for.
+Sign up at [app.getcassis.com](https://app.getcassis.com). You get your own copy of the Stallora project.
 
-## Setup
-
-### 1. Create your repository
-
-Press **Use this template** at the top of this page, create your repository, and clone it. You will wire CI to it and open a pull request against it, so it has to be one you own.
-
-[`cassis/`](cassis) already holds the context:
-
-- six [domains](cassis/domains) as Markdown
-- fifteen [tables](cassis/tables/STALLORA), thirteen [joins](cassis/joins.yml) and ten [metrics](cassis/metrics) as YAML
-- [`AGENTS.md`](cassis/AGENTS.md), the modeling guide an agent must read before editing these files
-
-Open [`cassis/metrics/on_time_delivery_rate.yml`](cassis/metrics/on_time_delivery_rate.yml): an expression, its filters, a description, the synonyms agents match on. That file is why on-time delivery questions get a grounded answer. In the loop, you will add one just like it for a term nobody has defined yet.
-
-### 2. Create a sandbox and an API key
-
-Sign up at [app.getcassis.com](https://app.getcassis.com). You land in your own organization with a seeded project, **Demo — Stallora Marketplace**: ~37,000 sellers and 1.2M orders on our Snowflake, already connected, with this exact context published against it. The sandbox also carries the issues Cassis detected from a fictional team's recent activity, so the queue you will read in the loop has content on day one. On a live project, those come from your own team's questions.
-
-Under **Settings → API keys**, create a key (`sk-k6-…`). One key serves the CLI, the MCP server and CI.
-
-```bash
-cp .env.example .env      # put your key in CASSIS_API_KEY
-set -a; . ./.env; set +a
-```
-
-### 3. Install the CLI
-
-```bash
-pip install -U cassis-cli
-cassis projects list                  # copy the sandbox project id
-cassis context pull --project <id>
-```
-
-`pull` writes `cassis/project.yml`, recording which project this checkout belongs to, so later commands need no `--project`.
-
-> [!NOTE]
-> Expect `pull` to report an up-to-date tree: your sandbox was seeded with exactly the files in this repository.
-
-### 4. Connect your agent
-
-If your agent is Claude Code, there is nothing to do: [`.mcp.json`](.mcp.json) in this repository already registers the server. Point any other MCP client at:
+Add Cassis to your agent as an MCP server:
 
 ```
 https://app.getcassis.com/mcp/
 ```
 
-No key needed when your client can do a browser sign-in. An agent that cannot open a browser — a Slack bot, a Dust or n8n agent — sends the key as a bearer token instead.
+In Claude: **Settings → Connectors → Add custom connector**, paste the URL, sign in when asked. Any MCP client works the same way; one that cannot open a browser (a Slack bot, an n8n agent) sends an API key as a bearer token instead.
 
-### 5. Add the CI secrets
+Then ask:
 
-In your repository's settings, add:
+> What is our on-time delivery rate?
 
-| Name | Add it as |
-|---|---|
-| `CASSIS_API_KEY` | Actions **secret** |
-| `CASSIS_PROJECT_ID` | Actions **variable** |
+A direct answer. `on_time_delivery_rate` is defined in the context, so every agent gets the same number.
 
-CI is already written: [`ontology.yml`](.github/workflows/ontology.yml) validates and runs the eval suite on pull requests, [`publish.yml`](.github/workflows/publish.yml) publishes on merge to `main`. Nothing to install, nothing to connect in a browser.
+> Which sellers are at risk?
 
-Setup is done. Everything below is one conversation with your agent, in your clone.
+**Your agent stops and asks.** Nobody at Stallora has defined "at risk", so Cassis returns the readings it could mean instead of picking one.
 
-## The loop
+> A seller is at risk when it has at least 5 delivered orders and either an on-time delivery rate below 85% or an average review score below 3. How many are there?
 
-### 1. Ask something nobody has defined
+The count, with your rule. But the rule now lives in this one conversation. The next person gets the same stop, or invents another threshold. Part 2 makes it shared.
 
-> which sellers are at risk?
+## 2. Make it stick (10 minutes)
 
-**Expect a plan, not a number.** Cassis does not pick a threshold for you. It returns the interpretations "at risk" could mean — low on-time rate, weak reviews, dormancy, combinations — one marked as default, and waits for you to choose.
+You need Python 3.10+ and an agent that can edit files and run commands (Claude Code, Cursor, Codex…).
 
-### 2. Answer it yourself
+Press **Use this template** at the top of this page, create your repository and clone it. [`cassis/`](cassis) holds the context: six [domains](cassis/domains) as Markdown; [tables](cassis/tables/STALLORA), [joins](cassis/joins.yml) and [metrics](cassis/metrics) as YAML; and [`AGENTS.md`](cassis/AGENTS.md), the guide your agent reads before editing.
 
-> a seller is at risk when it has at least 5 delivered orders and either an on-time delivery rate below 85% or an average review score below 3. A null on-time rate or null review score never trips its criterion. Return the count of at-risk sellers. Use that definition.
-
-**Expect the count in one turn.**
-
-> [!TIP]
-> If the number comes back without your thresholds, your agent approved the earlier plan instead of passing your definition. Have it send the definition as a new question, not as an approval.
-
-The definition now lives in exactly one conversation — this one. The next person gets the same gate, or worse, invents a different threshold and reports a different number. The rest of the loop makes it governed.
-
-### 3. List the open issues
-
-> List the open Cassis issues on this project.
-
-Cassis clusters the questions people ask into issues: a missing definition, an ambiguous term, a join it had to guess. In your sandbox the queue comes from the seeded team history, and the at-risk issue sits at the top, carrying a proposed fix.
-
-### 4. Read the proposed fix
-
-> What's Cassis proposing for the at-risk issue?
-
-**Expect a new `at_risk_sellers` metric:** the SQL expression, filters carrying the thresholds you just used, a description, the synonyms agents will match on. On a live project this is the maintenance loop: a definition given in a conversation comes back as a reviewable patch.
-
-### 5. Apply it and check
-
-> Looks right. Apply it on a branch and run checks.
-
-Your agent writes the files and validates them locally: `cassis context fmt` puts them in canonical form and refreshes the domain navigation, then `cassis context check` runs the same validation as the PR gate, cross-checking every reference against the warehouse's own schema.
-
-### 6. Pin it with an eval
-
-> Pin it with an eval: add a case with the question "How many sellers are at risk?", read the gold SQL from demo-gold.sql, then run only that new case to prove it.
-
-One question, plus the SQL you agree is right ([demo-gold.sql](demo-gold.sql)). The gold reads the raw tables; the metric answers off `DIM_SELLER`. The case passes because the *results* match, not the text — so a future edit that quietly changes what the number means goes red instead of shipping.
-
-### 7. Open a pull request
-
-> Commit this on the branch and open a PR.
-
-### 8. Review it on GitHub
-
-**Files changed** is the review: two files, the new metric and the domain README that now links it. The checks run beside it:
-
-- **ontology validation** — structure, round-tripping, and schema references
-- **eval suite** — the full suite against this branch's files, so a change that breaks a definition anywhere goes red in front of a reviewer rather than in front of a user
-
-### 9. Merge
-
-CI publishes the new version. Merging is the deploy — no console, no separate step.
-
-### 10. Ask again, in a new conversation
-
-> which sellers are at risk?
-
-**Expect a direct answer** — the same number, this time through the governed `at_risk_sellers` metric, with no gate. Start a *new* chat for this: each conversation is pinned to the context version it started on, so publishing never rewrites answers in a conversation already underway. A new chat picks up the latest version.
-
-### 11. Close the issue
+In the app, under **Settings → API keys**, create a key. Your project id is at the bottom of the card on your sandbox's first chat. Then:
 
 ```bash
-cassis issues resolve <id>
+cp .env.example .env      # put your key in CASSIS_API_KEY, your project id in CASSIS_PROJECT_ID
+set -a; . ./.env; set +a
+pip install -U cassis-cli
+cassis context pull
 ```
 
-`<id>` is in the list your agent printed in loop step 3. The other issues stay open. CLI and MCP read the same queue, so an agent with no browser has the whole loop: read the issue, fix the root cause in these files, prove it with `cassis verify` (format, validation and the eval suite in one command), open the pull request. `--json` on either command gives it parseable output. Merging is the one step it cannot take.
+Now work with your agent, in your clone:
+
+> List the open Cassis issues with `cassis issues list`, then show me the at-risk one with `cassis issues show`.
+
+Your sandbox comes with issues from a fictional team's recent questions. The at-risk issue is the gap you just hit. On your own project, the issues come from your team's questions.
+
+> Add the at-risk definition as a metric, following `cassis/AGENTS.md`. Then prove it answers with `cassis context test -q "How many sellers are at risk?"`.
+
+Your agent writes `cassis/metrics/at_risk_sellers.yml` and links it from the sellers domain. `context test` asks the question against your local files, before anything is published.
+
+> Run `cassis verify`, then publish with `cassis context upload`.
+
+`verify` runs formatting, validation against the warehouse schema and the eval suite. `upload` publishes your working tree to your sandbox.
+
+Back in your agent, **in a new chat** (each chat stays on the version it started with):
+
+> Which sellers are at risk?
+
+A direct answer, from the shared metric. Every agent connected to this project now gets it.
+
+## 3. Ship it through review (optional)
+
+On a real team, a context change goes through a pull request like code. This repository is wired for it:
+
+1. In your repository settings, add `CASSIS_API_KEY` as an Actions secret and `CASSIS_PROJECT_ID` as an Actions variable.
+2. Commit your change on a branch and open a pull request. [`ontology.yml`](.github/workflows/ontology.yml) validates the change and runs the eval suite against the branch.
+3. Merge. [`publish.yml`](.github/workflows/publish.yml) publishes the new version.
+
+## Your data next
+
+See your own agent answer from your metrics and definitions. [Try it on your data](https://getcassis.com/contact/).
 
 ## Limits
 
-- The sandbox runs on our Snowflake, and Cassis executes the SQL there. Connecting your own warehouse is not self-serve yet — [talk to us](https://getcassis.com/contact/); one domain's schema is enough to begin. When you get there, use this template again and replace the `cassis/` tree with your own.
-- Each signup carries a small inference credit — [contact us](https://getcassis.com/contact/) if you run out.
-- `cassis context upload` publishes straight from your working tree, no pull request — pass `--no-publish` to upload without publishing.
-
-## Links
-
-- [docs.getcassis.com](https://docs.getcassis.com) — the product documentation
-- [cassis-ontology-examples](https://github.com/GetCassis/cassis-ontology-examples) — two complete worked context trees
-- [getcassis.com](https://getcassis.com) — the data context layer that improves with use, and the loop this sandbox runs
+- The sandbox runs on our Snowflake, and Cassis executes the SQL there. Connecting your own warehouse is not self-serve yet.
+- Each signup carries a small inference credit. [Contact us](https://getcassis.com/contact/) if you run out.
